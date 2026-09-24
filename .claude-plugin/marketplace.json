@@ -1,0 +1,15 @@
+{
+  "name": "handoff",
+  "owner": {
+    "name": "Clumsyknight",
+    "email": "clusmsyknight@gmail.com"
+  },
+  "description": "Session handoff notes for Claude Code: write a structured note, start the next session from it.",
+  "plugins": [
+    {
+      "name": "handoff",
+      "source": "./",
+      "description": "Structured session handoff notes: /handoff:handoff and /handoff:pickup."
+    }
+  ]
+}

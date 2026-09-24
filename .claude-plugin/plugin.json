@@ -1,0 +1,11 @@
+{
+  "name": "handoff",
+  "version": "0.1.0",
+  "description": "End a session with a structured handoff note and start the next one from it: /handoff:handoff writes done, pending, blockers, key context and next commands; /handoff:pickup loads it with a drift check. A cheaper replacement for /resume.",
+  "author": {
+    "name": "Clumsyknight",
+    "email": "clusmsyknight@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": ["handoff", "session", "resume", "context", "notes", "worktree"]
+}
