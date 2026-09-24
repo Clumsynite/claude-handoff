@@ -101,9 +101,12 @@ Claude writes the goal and the sections. The script fills in the frontmatter and
 
 ```
 sh tests/run.sh                  # script tests in throwaway repos
+TEST_SH=dash sh tests/run.sh     # run handoff.sh under another shell
 shellcheck -s sh scripts/handoff.sh tests/run.sh
 claude plugin validate .
 ```
+
+CI (`.github/workflows/ci.yml`) runs shellcheck and checks the JSON manifests. It also runs the tests on Ubuntu, where `/bin/sh` is dash, and on macOS.
 
 All logic lives in `scripts/handoff.sh`, and the skills only call it. There's no `evals/` suite, because both skills are user-invoked only, so trigger evals don't apply. `tests/run.sh` covers the behaviour.
 

@@ -4,6 +4,8 @@
 
 HERE=$(cd "$(dirname "$0")/.." && pwd -P)
 H="$HERE/scripts/handoff.sh"
+# Shell that runs handoff.sh; set TEST_SH=dash (or bash) to test another /bin/sh.
+SH=${TEST_SH:-sh}
 WORK=$(mktemp -d "${TMPDIR:-/tmp}/handoff-test.XXXXXX")
 WORK=$(cd "$WORK" && pwd -P)
 trap 'rm -rf "$WORK"' EXIT INT TERM
@@ -26,7 +28,7 @@ check_not() { if printf '%s\n' "$2" | grep -Eq -- "$3"; then no "$1" "$2"; else 
 run() {
 	d=$1
 	shift
-	OUT=$(cd "$d" && sh "$H" "$@" 2>&1)
+	OUT=$(cd "$d" && "$SH" "$H" "$@" 2>&1)
 	rc=$?
 	[ "$rc" -eq 0 ] || no "exit 0: $* (got $rc)" "$OUT"
 }
@@ -38,7 +40,7 @@ note() {
 save() {
 	d=$1
 	shift
-	OUT=$(cd "$d" && note "$1" | sh "$H" save 2>&1)
+	OUT=$(cd "$d" && note "$1" | "$SH" "$H" save 2>&1)
 }
 
 REPO="$WORK/repo"
@@ -69,14 +71,14 @@ check "second save archives the first" "$OUT" "archived previous note: .*/archiv
 n=$(find "$CLAUDE_HANDOFF_DIR/$SLUG/archive" -type f | wc -l | tr -d ' ')
 if [ "$n" = 1 ]; then ok "one archive entry"; else no "one archive entry (got $n)"; fi
 check "current note is the newest" "$(cat "$f")" "^goal: second goal$"
-OUT=$(cd "$REPO" && printf '' | sh "$H" save 2>&1)
+OUT=$(cd "$REPO" && printf '' | "$SH" "$H" save 2>&1)
 check "empty save is refused" "$OUT" "not saved"
-OUT=$(cd "$REPO" && printf 'no goal here\n' | sh "$H" save 2>&1)
+OUT=$(cd "$REPO" && printf 'no goal here\n' | "$SH" "$H" save 2>&1)
 check "save without goal is refused" "$OUT" "must start with a 'goal:"
-OUT=$(cd "$REPO" && printf 'goal: x\n\n  \n' | sh "$H" save 2>&1)
+OUT=$(cd "$REPO" && printf 'goal: x\n\n  \n' | "$SH" "$H" save 2>&1)
 check "whitespace-only body is refused" "$OUT" "body is empty"
 check "refused saves leave the note" "$(cat "$f")" "^goal: second goal$"
-OUT=$(cd "$REPO" && printf -- '---\ngoal: fm goal\nbranch: fake\n---\n## Done\n- y\n' | sh "$H" save 2>&1)
+OUT=$(cd "$REPO" && printf -- '---\ngoal: fm goal\nbranch: fake\n---\n## Done\n- y\n' | "$SH" "$H" save 2>&1)
 check "frontmatter-form input is accepted" "$(cat "$f")" "^goal: fm goal$"
 check_not "caller frontmatter cannot override branch" "$(cat "$f")" "^branch: fake$"
 
@@ -182,7 +184,7 @@ run "$WT2" hint
 if [ -z "$OUT" ]; then ok "hint is silent without a note"; else no "hint is silent without a note" "$OUT"; fi
 start=$(perl -MTime::HiRes=time -e 'printf "%d", time*1000')
 i=0
-while [ $i -lt 10 ]; do (cd "$REPO" && sh "$H" hint >/dev/null); i=$((i + 1)); done
+while [ $i -lt 10 ]; do (cd "$REPO" && "$SH" "$H" hint >/dev/null); i=$((i + 1)); done
 end=$(perl -MTime::HiRes=time -e 'printf "%d", time*1000')
 avg=$(((end - start) / 10))
 if [ "$avg" -lt 500 ]; then ok "hint averages ${avg}ms (<500ms; hook timeout is 5s)"; else no "hint averages ${avg}ms (<500ms; hook timeout is 5s)"; fi
