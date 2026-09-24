@@ -7,5 +7,7 @@
     "email": "clusmsyknight@gmail.com"
   },
   "license": "MIT",
+  "homepage": "https://github.com/Clumsynite/claude-handoff",
+  "repository": "https://github.com/Clumsynite/claude-handoff",
   "keywords": ["handoff", "session", "resume", "context", "notes", "worktree"]
 }
