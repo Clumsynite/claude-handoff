@@ -1,6 +1,7 @@
 # handoff
 
 [![CI](https://github.com/Clumsynite/claude-handoff/actions/workflows/ci.yml/badge.svg)](https://github.com/Clumsynite/claude-handoff/actions/workflows/ci.yml)
+[![Release](https://github.com/Clumsynite/claude-handoff/actions/workflows/release.yml/badge.svg)](https://github.com/Clumsynite/claude-handoff/actions/workflows/release.yml)
 [![Latest release](https://img.shields.io/github/v/release/Clumsynite/claude-handoff?display_name=release)](https://github.com/Clumsynite/claude-handoff/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -153,9 +154,10 @@ All logic lives in `scripts/handoff.sh`, and the skills only call it. There's no
 
 `version` in `.claude-plugin/plugin.json` pins installed copies: users only get changes when it is bumped.
 
-1. Bump `version` in `.claude-plugin/plugin.json` and commit.
-2. Wait for CI to pass on `main`.
-3. `claude plugin tag --push .` (creates and pushes `handoff--v<version>`), then `gh release create handoff--v<version> --generate-notes`.
+Releases are built by CI/CD:
+
+1. Bump `version` in `.claude-plugin/plugin.json`, commit, and push to `main`.
+2. When CI passes on that push, `.github/workflows/release.yml` creates the tag `handoff--v<version>` and a GitHub release with generated notes at the tested commit. If that release already exists (e.g. a push without a version bump), it does nothing. It can also be run by hand from the Actions tab.
 
 ## License
 
