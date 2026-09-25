@@ -1,7 +1,7 @@
 # handoff
 
 [![CI](https://github.com/Clumsynite/claude-handoff/actions/workflows/ci.yml/badge.svg)](https://github.com/Clumsynite/claude-handoff/actions/workflows/ci.yml)
-[![Latest release](https://img.shields.io/github/v/release/Clumsynite/claude-handoff?sort=semver)](https://github.com/Clumsynite/claude-handoff/releases/latest)
+[![Latest release](https://img.shields.io/github/v/release/Clumsynite/claude-handoff?display_name=release)](https://github.com/Clumsynite/claude-handoff/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A Claude Code plugin that ends a session with a short, structured note and starts the next session from that note, not from the old transcript.
